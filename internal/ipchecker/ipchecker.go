@@ -45,6 +45,7 @@ func Execute(path string) (Result, error) {
 
 	var res Result
 	linesCh, errCh := lr.Read()
+
 	for ln := range linesCh {
 		res.Lines++
 		if ln == "" {

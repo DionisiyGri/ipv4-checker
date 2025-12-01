@@ -25,6 +25,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Printf("lines processed: %d\n", res.Lines)
-	fmt.Printf("unique addresses: %d\n", res.Unique)
+	fmt.Printf("Lines processed: %d\n", res.Lines)
+	fmt.Printf("Unique addresses: %d\n", res.Unique)
 }

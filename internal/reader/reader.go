@@ -36,7 +36,7 @@ func (lr *LineReader) Close() error {
 }
 
 // Read returns a channel of string with trimmed IP
-// Channel will be closed in case EOF is reached
+// Channel will be closed in case EOF is reached or read error happened
 func (lr *LineReader) Read() (<-chan string, <-chan error) {
 	linesCh := make(chan string)
 	errCh := make(chan error, 1)
