@@ -1,8 +1,10 @@
-package reader
+package reader_test
 
 import (
 	"os"
 	"testing"
+
+	"github.com/DionisiyGri/ipv4-checker/internal/reader"
 )
 
 func TestReader(t *testing.T) {
@@ -24,7 +26,7 @@ func TestReader(t *testing.T) {
 		t.Fatalf("seek error %v", err)
 	}
 
-	lr, err := New(tmp.Name(), 1<<32)
+	lr, err := reader.New(tmp.Name(), 1<<32)
 	if err != nil {
 		t.Fatalf("create new reader error: %v", err)
 	}
