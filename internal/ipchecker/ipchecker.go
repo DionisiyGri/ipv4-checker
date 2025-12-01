@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	"os"
 
+	"github.com/DionisiyGri/ipv4-checker/internal/bitset"
 	"github.com/DionisiyGri/ipv4-checker/internal/reader"
 )
 
@@ -31,17 +31,7 @@ func Execute(path string) (Result, error) {
 	const bitsPerBucket = uint64(64)
 	buckets := totalBits / bitsPerBucket
 
-	// check if it is possible to allocate needed amount of memory
-	var bitset []uint64
-	func() {
-		defer func() {
-			if r := recover(); r != nil {
-				fmt.Fprintf(os.Stderr, "failed to allocate %d uint64 buckets, ~%d bytes", buckets, buckets*8)
-				os.Exit(1)
-			}
-		}()
-		bitset = make([]uint64, buckets)
-	}()
+	bs := bitset.New(buckets)
 
 	var res Result
 	linesCh, errCh := lr.Read()
@@ -64,7 +54,7 @@ func Execute(path string) (Result, error) {
 
 		//convert 4 bytes ipv4 into int32 value (a.b.c.d -> 0xAABBDDC)
 		ipNum := binary.BigEndian.Uint32(ip4)
-		if setBit(bitset, ipNum) {
+		if bs.Set(ipNum) {
 			res.Unique++
 		}
 	}
