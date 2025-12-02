@@ -10,6 +10,8 @@ import (
 	"github.com/DionisiyGri/ipv4-checker/internal/reader"
 )
 
+const buffer = 4 * 1024 * 1024 // 4mb buffer
+
 type Result struct {
 	Lines  uint64
 	Unique uint64
@@ -20,7 +22,7 @@ func Execute(path string) (Result, error) {
 		return Result{}, errors.New("empty path")
 	}
 
-	lr, err := reader.New(path, 1<<20) // 1mb buffer
+	lr, err := reader.New(path, buffer)
 	if err != nil {
 		return Result{}, fmt.Errorf("open file: %w", err)
 	}

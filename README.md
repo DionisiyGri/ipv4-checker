@@ -29,10 +29,28 @@ System:
 | Memory                         | 16 GB                       |
 
 ```
-/ipcheck -file ip_addresses.txt 
-2025/12/02 11:09:12 cant convert ip [194.14] to uint: %!w(*errors.errorString=&{invalid char})
+1mb buffer
+./ipcheck -file ip_addresses.txt 
+2025/12/02 11:09:12 cant convert ip [194.14] to uint: invalid char)
 2025/12/02 11:11:03 Lines processed: 7946083138
 2025/12/02 11:11:03 Unique addresses: 1000000000
 2025/12/02 11:11:03 Memory stats: Alloc=2001.19MB, TotalAlloc=123248.69MB, Sys=2548.36MB, NumGC=240
 Processing completed in 14m33.864060655s
+```
+```
+4mb buffer
+./ipcheck_4mbbuffer -file ip_addresses.txt 
+2025/12/02 11:52:33 cant convert ip [194.14] to uint: invalid char
+2025/12/02 11:54:26 Lines processed: 7946083138
+2025/12/02 11:54:26 Unique addresses: 1000000000
+2025/12/02 11:54:26 Memory stats: Alloc=1632.16MB, TotalAlloc=123251.67MB, Sys=2380.54MB, NumGC=240
+Processing completed in 13m38.32173899s
+```
+```
+10mb buffer
+2025/12/02 12:11:51 cant convert ip [194.14] to uint: invalid char
+2025/12/02 12:13:38 Lines processed: 7946083138
+2025/12/02 12:13:38 Unique addresses: 1000000000
+2025/12/02 12:13:38 Memory stats: Alloc=1638.17MB, TotalAlloc=123255.66MB, Sys=2253.09MB, NumGC=237
+Processing completed in 14m8.345544357s
 ```
