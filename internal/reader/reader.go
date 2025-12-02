@@ -2,10 +2,8 @@ package reader
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"os"
-	"strings"
 )
 
 // LineReader reads a file line by line
@@ -20,6 +18,7 @@ func New(path string, bufSize int) (*LineReader, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &LineReader{
 		r: bufio.NewReaderSize(f, bufSize),
 		f: f,
@@ -35,29 +34,14 @@ func (lr *LineReader) Close() error {
 	return lr.f.Close()
 }
 
-// Read returns a channel of string with trimmed IP
-// Channel will be closed in case EOF is reached or read error happened
-func (lr *LineReader) Read() (<-chan string, <-chan error) {
-	linesCh := make(chan string)
-	errCh := make(chan error, 1)
-
-	go func() {
-		defer close(linesCh)
-		for {
-			line, err := lr.r.ReadString('\n')
-			if len(line) > 0 {
-				ln := strings.TrimSpace(line)
-				linesCh <- ln
-			}
-			if err != nil {
-				if err == io.EOF {
-					fmt.Println("stop reading lines in file -> EOF")
-					return
-				}
-				errCh <- err
-				return
-			}
+// Read is a wraper for ReadBytes with additional error checks
+func (lr *LineReader) Read() ([]byte, error) {
+	line, err := lr.r.ReadBytes('\n')
+	if err != nil {
+		if err == io.EOF && len(line) > 0 {
+			return line, nil
 		}
-	}()
-	return linesCh, errCh
+		return nil, err
+	}
+	return line, nil
 }
