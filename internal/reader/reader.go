@@ -45,3 +45,28 @@ func (lr *LineReader) Read() ([]byte, error) {
 	}
 	return line, nil
 }
+
+// readSlices a wrapper for ReadSlice functionality with additional error handling
+func (lr *LineReader) readSlice() ([]byte, error) {
+	var fullLine []byte
+
+	for {
+		line, err := lr.r.ReadSlice('\n')
+		fullLine = append(fullLine, line...)
+
+		if err != nil {
+			if err == bufio.ErrBufferFull {
+				continue
+			}
+
+			if err == io.EOF {
+				if len(fullLine) > 0 {
+					return fullLine, nil
+				}
+				return nil, io.EOF
+			}
+			return nil, err
+		}
+		return fullLine, nil
+	}
+}

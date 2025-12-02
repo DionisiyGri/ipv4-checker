@@ -54,3 +54,12 @@ Processing completed in 13m38.32173899s
 2025/12/02 12:13:38 Memory stats: Alloc=1638.17MB, TotalAlloc=123255.66MB, Sys=2253.09MB, NumGC=237
 Processing completed in 14m8.345544357s
 ```
+
+```
+ReadSlice()
+2025/12/02 13:09:54 cant convert ip [194.14] to uint: invalid char
+2025/12/02 13:12:35 Lines processed: 7946083138
+2025/12/02 13:12:35 Unique addresses: 1000000000
+2025/12/02 13:12:35 Memory stats: Alloc=888.15MB, TotalAlloc=124630.44MB, Sys=2829.12MB, NumGC=243
+Processing completed in 16m32.145485844s
+```
