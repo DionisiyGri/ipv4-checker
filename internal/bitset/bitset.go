@@ -6,9 +6,9 @@ type Bitset struct {
 	b []uint64
 }
 
-// New allocates buckets uint64s
-func New(buckets uint64) *Bitset {
-	return &Bitset{b: make([]uint64, buckets)}
+// New allocates bitse of given size
+func New(size uint64) *Bitset {
+	return &Bitset{b: make([]uint64, size)}
 }
 
 // Set returns true if the bit was previously 0 (eg. newly set)
