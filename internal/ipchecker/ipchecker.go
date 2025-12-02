@@ -33,8 +33,9 @@ func Execute(path string) (Result, error) {
 	bs := bitset.New(buckets)
 
 	var res Result
+	// Read lines until EOF
 	for {
-		lines, err := lr.Read()
+		line, err := lr.Read()
 		if err == io.EOF {
 			break
 		}
@@ -43,9 +44,9 @@ func Execute(path string) (Result, error) {
 		}
 		res.Lines++
 
-		ipNum, err := ipToUint32(trim(lines))
+		ipNum, err := ipToUint32(trim(line))
 		if err != nil {
-			log.Printf("cant convert ip [%s] to uint: %w", lines, err)
+			log.Printf("cant convert ip [%s] to uint: %v", line, err)
 			continue
 		}
 		if bs.Set(ipNum) {
@@ -55,7 +56,7 @@ func Execute(path string) (Result, error) {
 	return res, nil
 }
 
-// trim trims lines, spaces with no allocations
+// Trim spaces and newline characters
 func trim(b []byte) []byte {
 	start := 0
 	end := len(b)
@@ -85,13 +86,13 @@ func trim(b []byte) []byte {
 
 // ipToUint32 converts ip into uint32
 func ipToUint32(b []byte) (uint32, error) {
-	var p [4]uint32
-	part := 0
+	var octets [4]uint32
+	idx := 0
 
 	for _, c := range b {
 		if c == '.' {
-			part++
-			if part > 3 {
+			idx++
+			if idx > 3 {
 				return 0, fmt.Errorf("invalid ip")
 			}
 			continue
@@ -100,15 +101,15 @@ func ipToUint32(b []byte) (uint32, error) {
 			return 0, fmt.Errorf("invalid char")
 		}
 
-		p[part] = p[part]*10 + uint32(c-'0')
-		if p[part] > 255 {
+		octets[idx] = octets[idx]*10 + uint32(c-'0')
+		if octets[idx] > 255 {
 			return 0, fmt.Errorf("invalid octet")
 		}
 	}
 
-	if part != 3 {
+	if idx != 3 {
 		return 0, fmt.Errorf("invalid ip")
 	}
 
-	return p[0]<<24 | p[1]<<16 | p[2]<<8 | p[3], nil
+	return octets[0]<<24 | octets[1]<<16 | octets[2]<<8 | octets[3], nil
 }
